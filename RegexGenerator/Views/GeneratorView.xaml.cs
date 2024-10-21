@@ -25,6 +25,7 @@ namespace RegexGenerator.Views
         public GeneratorView()
         {
             InitializeComponent();
+            this.WhenActivated(d => { });
         }
     }
 }

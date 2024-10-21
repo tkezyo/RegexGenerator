@@ -2,6 +2,7 @@
 using OllamaSharp.Models;
 using static System.Net.Mime.MediaTypeNames;
 using System.Text;
+using Microsoft.Extensions.Primitives;
 
 namespace RegexGenerator.Services
 {
@@ -16,7 +17,13 @@ namespace RegexGenerator.Services
             Client.SelectedModel = "gemma2";
         }
 
-        public async Task<string> Generate(string Text, string Prompt)
+        public async Task<List<string>> GetModels()
+        {
+            var rr = await Client.ListLocalModels();
+            return rr.Select(c => c.Name!).ToList();
+        }
+
+        public async Task<string> Generate(string Text, string Prompt, string model)
         {
             var template = $$"""
 找出满足要求的正则表达式
@@ -35,7 +42,7 @@ namespace RegexGenerator.Services
             var generateRequest = new GenerateRequest
             {
                 Prompt = template,
-                Model = "gemma2",
+                Model = model,
                 Stream = true,
                 Context = [],
                 Options = new RequestOptions

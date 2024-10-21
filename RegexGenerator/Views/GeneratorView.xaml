@@ -26,16 +26,18 @@ xmlns:vms="clr-namespace:RegexGenerator.ViewModels"
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <hc:ProgressButton Grid.Column="0"  Content="生成" Command="{Binding GenerateCommand}" />
-            <TextBox Grid.Column="1"   Text="{Binding RegexText}"  TextWrapping="Wrap"/>
-            <Button Grid.Column="0" Grid.Row="1"  Content="验证" Command="{Binding ValidateCommand}"/>
-            <TextBox Grid.Column="1"   Grid.Row="1" Text="{Binding Result}"  TextWrapping="Wrap"/>
+            <ComboBox ItemsSource="{Binding Models}" SelectedItem="{Binding SelectedModel}" Grid.Column="0"/>
+            <hc:ProgressButton Grid.Column="1"  Content="生成" Command="{Binding GenerateCommand}" />
+            <TextBox Grid.Column="2"   Text="{Binding RegexText}"  TextWrapping="Wrap"/>
+            <Button Grid.Column="1" Grid.Row="1"  Content="验证" Command="{Binding ValidateCommand}"/>
+            <TextBox Grid.Column="2"   Grid.Row="1" Text="{Binding Result}"  TextWrapping="Wrap"/>
         </Grid>
 
         <ListBox ItemsSource="{Binding Results}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"/>

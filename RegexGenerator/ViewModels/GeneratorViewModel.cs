@@ -32,7 +32,10 @@ namespace RegexGenerator.ViewModels
             this.WhenAnyValue(c => c.Prompt).Subscribe(c => Errors?.Clear());
             this.WhenAnyValue(c => c.Text).Subscribe(c => Errors?.Clear());
         }
-
+        public override async Task Activate()
+        {
+         await   GetModels();
+        }
         [Reactive]
         public string? Text { get; set; }
         [Reactive]
@@ -42,15 +45,16 @@ namespace RegexGenerator.ViewModels
 
         [Reactive]
         public string? Result { get; set; }
+
         public ReactiveCommand<Unit, Unit> GenerateCommand { get; }
         public async Task Generate()
         {
-            if (string.IsNullOrWhiteSpace(Text) || Text == "请输入文本")
+            if (string.IsNullOrWhiteSpace(SelectedModel) ||string.IsNullOrWhiteSpace(Text) || Text == "请输入文本")
             {
                 Prompt = "请输入文本";
                 return;
             }
-            RegexText = await _ollamaService.Generate(Text, Prompt + "\r\n" + string.Join("\r\n", Errors));
+            RegexText = await _ollamaService.Generate(Text, Prompt + "\r\n" + string.Join("\r\n", Errors), SelectedModel);
         }
 
         public List<string> Errors { get; set; } = [];
@@ -94,5 +98,21 @@ namespace RegexGenerator.ViewModels
             }
             return false;
         }
+
+        [Reactive]
+        public string? SelectedModel { get; set; }
+        public ObservableCollection<string> Models { get; set; } = [];
+
+        public async Task GetModels()
+        {
+            Models.Clear();
+            var models = await _ollamaService.GetModels();
+            foreach (var item in models)
+            {
+                Models.Add(item);
+            }
+        }
+
+
     }
 }
